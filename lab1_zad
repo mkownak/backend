@@ -1,0 +1,29 @@
+import requests
+import json
+
+
+def check_url(url: str) -> bool:
+    check = requests.get(url)
+    if check.status_code < 200 or check.status_code > 299:
+        return False
+    return True
+
+
+print(check_url('https://api.gios.gov.pl/pjp-api/rest/station/findAll'))
+
+import requests
+from bs4 import BeautifulSoup
+
+url = 'https://www.meteoprog.pl/pl/weather/Olsztyn/'
+response = requests.get(url)
+
+soup = BeautifulSoup(response.content, features="html.parser")
+
+
+today_temp = soup.find('div', class_='current-temperature').find('span')
+next_temp = soup.find('ul', class_='today-hourly-weather hide-scroll')
+
+print(next_temp)
+
+for item in next_temp:
+    print(item.soup.find('li'))
