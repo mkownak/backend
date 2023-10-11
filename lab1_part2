@@ -1,0 +1,47 @@
+import requests
+import json
+
+url = 'https://api.gios.gov.pl/pjp-api/rest/station/findAll'
+response = requests.get(url)
+
+content = response.content.decode('utf-8')
+# print(content)
+
+parsed_content = json.loads(content)
+# print(type(response.content), type(content), type(parsed_content))
+# print(parsed_content)
+
+for station in parsed_content:
+    print(f'ID: {station["id"]}, nazwa: {station["stationName"]}, '
+          f'miasto: {station["city"]["name"]}, lokalizacja: {station["addressStreet"]}')
+
+##################################################################################################
+
+station_id = 877
+url_sensor = f'https://api.gios.gov.pl/pjp-api/rest/station/sensors/{station_id}'
+response_sensor = requests.get(url_sensor)
+
+if response_sensor.status_code != 200:
+    print("Error")
+    exit()
+
+stations = json.loads(response_sensor.content.decode('utf-8'))
+# print(stations)
+for station in stations:
+    print(f'ID: {station["id"]}, param: {station["param"]}')
+
+###################################################################################################
+
+sensor_id = 5766
+url = f'https://api.gios.gov.pl/pjp-api/rest/data/getData/{sensor_id}'
+response = requests.get(url)
+
+if response.status_code != 200:
+  assert False
+
+data = json.loads(response.content.decode('utf-8'))
+value = data['values'][0]
+
+print(f'Czas: {value["date"]}, wartosc odczytu: {value["value"]}')
+
+###################################################################################################
