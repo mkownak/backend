@@ -1,5 +1,6 @@
 import requests
-import json
+from bs4 import BeautifulSoup
+import matplotlib.pyplot as plt
 
 
 def check_url(url: str) -> bool:
@@ -11,19 +12,32 @@ def check_url(url: str) -> bool:
 
 print(check_url('https://api.gios.gov.pl/pjp-api/rest/station/findAll'))
 
-import requests
-from bs4 import BeautifulSoup
-
 url = 'https://www.meteoprog.pl/pl/weather/Olsztyn/'
 response = requests.get(url)
 
 soup = BeautifulSoup(response.content, features="html.parser")
 
-
 today_temp = soup.find('div', class_='current-temperature').find('span')
-next_temp = soup.find('ul', class_='today-hourly-weather hide-scroll')
+next_temp = soup.find('ul', class_='today-hourly-weather hide-scroll').find_all("li")
 
+temperatury = []
+temperatury.append(today_temp.text.strip())
 print(next_temp)
 
 for item in next_temp:
-    print(item.soup.find('li'))
+    temp = item.find('span', class_="today-hourly-weather__temp").text.strip()
+    temperatury.append(temp)
+
+print(temperatury)
+
+converted_temperatury = []
+
+for temp in temperatury:
+    liczba = int(temp.replace('+','').replace('°',''))
+    converted_temperatury.append(liczba)
+
+print(converted_temperatury)
+
+x=["obecna","noc",'rano','dzien','wieczor']
+plt.plot(x,converted_temperatury)
+plt.show()
