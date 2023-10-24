@@ -1,4 +1,11 @@
-if os.path.exists('C:repositories//weather_repo_db.py'):
+db_path = None
+for root, dirs, files in os.walk("C:"):
+    if "weather_repo_db.py" in files:
+        db_path = os.path.join(root, "weather_repo_db.py")
+        print(f"znaleziono 'weather_repo_db': {db_path}")
+        break
+
+if os.path.exists(db_path):
     from repositories.weather_repo_db import WeatherRepo
 else:
     from repositories.weather_repo_txt import WeatherRepo
