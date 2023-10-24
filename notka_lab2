@@ -1,0 +1,4 @@
+if os.path.exists('C:repositories//weather_repo_db.py'):
+    from repositories.weather_repo_db import WeatherRepo
+else:
+    from repositories.weather_repo_txt import WeatherRepo
